@@ -1,6 +1,7 @@
 # Amy Sensei
+<img align='left' src="amysan.gif">
 Amy Sensei is a feature-rich discord bot with many Fun Commands , Date any Discord User, Make Siblings etc.
-<img align='center' src="amysan.gif">
+
 ## Fun
 
 - `cat` - Random Cat Photo with a Fact.
