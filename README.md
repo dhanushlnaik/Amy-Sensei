@@ -1,8 +1,9 @@
 # Amy Sensei
-<img src="amysan.gif">
 Amy Sensei is a feature-rich discord bot with many Fun Commands , Date any Discord User, Make Siblings etc.
+<img width="50%" height="50%" alt="Github" src="https://i.pinimg.com/originals/8a/a6/4a/8aa64a89ebe0e4e76504f240cf528612.gif" />
 
 ## Fun
+<img width="30%" align="right" alt="Github" src="amysan.gif" />
 
 - `cat` - Random Cat Photo with a Fact.
 - `dog` - Random Dog Photo with a Fact.
@@ -36,6 +37,7 @@ Amy Sensei is a feature-rich discord bot with many Fun Commands , Date any Disco
 - `todo` - Make your interactive Todo List!
 
 ## Miscellaneous
+<img width="30%" align="right" alt="Github" src="https://i.pinimg.com/originals/2a/35/7d/2a357d840ba1d6e6b3cbec12660379fa.jpg" />
 
 - `botstats`  - Show Bot Stats!
 - `ping` - Checkout whether bot is online.
