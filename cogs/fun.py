@@ -273,7 +273,180 @@ class Fun(commands.Cog):
         embed.add_field(name="Example:", value=f"{ex}")
         embed.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=embed)
+    @commands.command(aliases=['mock'])
+    async def drunkify(self, ctx, *, s):
+        lst = [str.upper, str.lower]
+        newText = await commands.clean_content().convert(ctx, ''.join(choice(lst)(c) for c in s))
+        if len(newText) <= 380:
+            await ctx.send(newText)
+        else:
+            try:
+                await ctx.author.send(newText)
+                await ctx.send(f"**{ctx.author.mention} The output too was too large, so I sent it to your DMs! :mailbox_with_mail:**")
+            except Exception:
+                await ctx.send(f"**{ctx.author.mention} There was a problem, and I could not send the output. It may be too large or malformed**")
 
+
+    @commands.command()
+    async def ship(self, ctx, name1 : commands.clean_content, name2 : commands.clean_content):
+        if ctx.channel.id in blacklistChannel:
+            await ctx.reply("Don't Use That Command in General Chat")
+            pass
+        shipnumber = randint(0,100)
+        if 0 <= shipnumber <= 10:
+            status = "Really low! {}".format(choice(["Friendzone ;(", 
+                                                            'Just "friends"', 
+                                                            '"Friends"', 
+                                                            "Little to no love ;(", 
+                                                            "There's barely any love ;("]))
+        elif 10 < shipnumber <= 20:
+            status = "Low! {}".format(choice(["Still in the friendzone", 
+                                                     "Still in that friendzone ;(", 
+                                                     "There's not a lot of love there... ;("]))
+        elif 20 < shipnumber <= 30:
+            status = "Poor! {}".format(choice(["But there's a small sense of romance from one person!", 
+                                                     "But there's a small bit of love somewhere", 
+                                                     "I sense a small bit of love!", 
+                                                     "But someone has a bit of love for someone..."]))
+        elif 30 < shipnumber <= 40:
+            status = "Fair! {}".format(choice(["There's a bit of love there!", 
+                                                      "There is a bit of love there...", 
+                                                      "A small bit of love is in the air..."]))
+        elif 40 < shipnumber <= 60:
+            status = "Moderate! {}".format(choice(["But it's very one-sided OwO", 
+                                                          "It appears one sided!", 
+                                                          "There's some potential!", 
+                                                          "I sense a bit of potential!", 
+                                                          "There's a bit of romance going on here!", 
+                                                          "I feel like there's some romance progressing!", 
+                                                          "The love is getting there..."]))
+        elif 60 < shipnumber <= 70:
+            status = "Good! {}".format(choice(["I feel the romance progressing!", 
+                                                      "There's some love in the air!", 
+                                                      "I'm starting to feel some love!"]))
+        elif 70 < shipnumber <= 80:
+            status = "Great! {}".format(choice(["There is definitely love somewhere!", 
+                                                       "I can see the love is there! Somewhere...", 
+                                                       "I definitely can see that love is in the air"]))
+        elif 80 < shipnumber <= 90:
+            status = "Over average! {}".format(choice(["Love is in the air!", 
+                                                              "I can definitely feel the love", 
+                                                              "I feel the love! There's a sign of a match!", 
+                                                              "There's a sign of a match!", 
+                                                              "I sense a match!", 
+                                                              "A few things can be imporved to make this a match made in heaven!"]))
+        elif 90 < shipnumber <= 100:
+            status = "True love! {}".format(choice(["It's a match!", 
+                                                           "There's a match made in heaven!", 
+                                                           "It's definitely a match!", 
+                                                           "Love is truely in the air!", 
+                                                           "Love is most definitely in the air!"]))
+
+        if shipnumber <= 33:
+            shipColor = 0xE80303
+        elif 33 < shipnumber < 66:
+            shipColor = 0xff6600
+        else:
+            shipColor = 0x3be801
+
+        emb = (discord.Embed(color=shipColor, \
+                             title="Love test for:", \
+                             description="**{0}** and **{1}** {2}".format(name1, name2, choice([
+                                                                                                        ":sparkling_heart:", 
+                                                                                                        ":heart_decoration:", 
+                                                                                                        ":heart_exclamation:", 
+                                                                                                        ":heartbeat:", 
+                                                                                                        ":heartpulse:", 
+                                                                                                        ":hearts:", 
+                                                                                                        ":blue_heart:", 
+                                                                                                        ":green_heart:", 
+                                                                                                        ":purple_heart:", 
+                                                                                                        ":revolving_hearts:", 
+                                                                                                        ":yellow_heart:", 
+                                                                                                        ":two_hearts:"]))))
+        emb.add_field(name="Results:", value=f"{shipnumber}%", inline=True)
+        emb.add_field(name="Status:", value=(status), inline=False)
+        emb.set_author(name="Shipping", icon_url="http://moziru.com/images/kopel-clipart-heart-6.png")
+        await ctx.send(embed=emb)
+        
+    @commands.command(aliases=["8ball", "tellme"])
+    async def eightball(self, ctx, *, _ballInput: commands.clean_content):
+        if ctx.channel.id in blacklistChannel:
+            await ctx.reply("Don't Use That Command in General Chat")
+            return
+        """extra generic just the way you like it"""
+        choiceType = choice(["(Affirmative)", "(Non-committal)", "(Negative)"])
+        if choiceType == "(Affirmative)":
+            prediction = choice(["It is certain ", 
+                                        "It is decidedly so ", 
+                                        "Without a doubt ", 
+                                        "Yes, definitely ", 
+                                        "You may rely on it ", 
+                                        "As I see it, yes ",
+                                        "Most likely ", 
+                                        "Outlook good ", 
+                                        "Yes ", 
+                                        "Signs point to yes "]) + ":8ball:"
+
+            emb = (discord.Embed(title="Question: {}".format(_ballInput), colour=0x3be801, description=prediction))
+        elif choiceType == "(Non-committal)":
+            prediction = choice(["Reply hazy try again ", 
+                                        "Ask again later ", 
+                                        "Better not tell you now ", 
+                                        "Cannot predict now ", 
+                                        "Concentrate and ask again "]) + ":8ball:"
+            emb = (discord.Embed(title="Question: {}".format(_ballInput), colour=0xff6600, description=prediction))
+        elif choiceType == "(Negative)":
+            prediction = choice(["Don't count on it ", 
+                                        "My reply is no ", 
+                                        "My sources say no ", 
+                                        "Outlook not so good ", 
+                                        "Very doubtful "]) + ":8ball:"
+            emb = (discord.Embed(title="Question: {}".format(_ballInput), colour=0xE80303, description=prediction))
+        emb.set_author(name='Magic 8 ball', icon_url='https://www.horoscope.com/images-US/games/game-magic-8-ball-no-text.png')
+        await ctx.send(embed=emb)
+
+
+    @commands.command(aliases=['gay-scanner', 'gayscanner', 'gay'])
+    async def gay_scanner(self, ctx,* ,user: commands.clean_content=None):
+        if ctx.channel.id in blacklistChannel:
+            await ctx.reply("Don't Use That Command in General Chat")
+            return
+        if not user:
+            user = ctx.author.name
+        gayness = randint(0,100)
+        if gayness <= 33:
+            gayStatus = choice(["No homo", 
+                                       "Wearing socks", 
+                                       '"Only sometimes"', 
+                                       "Straight-ish", 
+                                       "No homo bro", 
+                                       "Girl-kisser", 
+                                       "Hella straight"])
+            gayColor = 0xFFC0CB
+        elif 33 < gayness < 66:
+            gayStatus = choice(["Possible homo", 
+                                       "My gay-sensor is picking something up", 
+                                       "I can't tell if the socks are on or off", 
+                                       "Gay-ish", 
+                                       "Looking a bit homo", 
+                                       "lol half  g a y", 
+                                       "safely in between for now"])
+            gayColor = 0xFF69B4
+        else:
+            gayStatus = choice(["LOL YOU GAY XDDD FUNNY", 
+                                       "HOMO ALERT", 
+                                       "MY GAY-SENSOR IS OFF THE CHARTS", 
+                                       "STINKY GAY", 
+                                       "BIG GEAY", 
+                                       "THE SOCKS ARE OFF", 
+                                       "HELLA GAY"])
+            gayColor = 0xFF00FF
+        emb = discord.Embed(description=f"Gayness for **{user}**", color=gayColor)
+        emb.add_field(name="Gayness:", value=f"{gayness}% gay")
+        emb.add_field(name="Comment:", value=f"{gayStatus} :kiss_mm:")
+        emb.set_author(name="Gay-Scanner™", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/ICA_flag.svg/2000px-ICA_flag.svg.png")
+        await ctx.send(embed=emb)
 def setup(bot):
     bot.add_cog(Fun(bot))
  
