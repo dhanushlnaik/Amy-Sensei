@@ -114,9 +114,7 @@ class MarrySys(commands.Cog):
         if ctx.channel.id in blacklistChannel:
             await ctx.reply("Don't Use That Command in General Chat")
             return
-        if ctx.author.id ==user.id:
-            await ctx.reply("Sad Soul!! You can't marry Yourself!")
-            return
+
         prefix = check_prefix(ctx.guild.id)
 
         if user is None:
@@ -138,10 +136,13 @@ class MarrySys(commands.Cog):
                 emb.set_thumbnail(url="https://i.gifer.com/ZdPB.gif")
                 await ctx.send(embed=emb)
         elif not user.bot:
+            if ctx.author.id ==user.id:
+              await ctx.reply("Sad Soul!! You can't marry Yourself!")
+              return
             if is_sibling(ctx.author.id, user.id):
                 await ctx.reply("https://cdn.discordapp.com/attachments/855321779001884682/865241148943761418/Sweet_home_Alabama_ukelele.webm")
                 await ctx.send(f":no_entry_sign: | **{ctx.author.name}** , you can't marry your sibling!!")
-                pass
+                return
             rel = int(check_relationship(ctx.author.id,"Relationship"))
             rel2 = int(check_relationship(user.id,"Relationship"))
             if rel == 0 and rel2 == 0 and not is_sibling(ctx.author.id, user.id):
@@ -166,24 +167,24 @@ class MarrySys(commands.Cog):
                         add_relationship(user.id,"Relationship",str(ctx.author.id ))
                         add_time(int(user.id))
                         add_time(int(ctx.author.id))
-                        pass
+                        return
                     else:
                         await msg.edit(components=[])
                         await ctx.send(f"💔 || {user.mention}, you have decline a marriage request to {ctx.author.mention}")
-                        pass
-                except Error as e:
-                    print(e)
+                        return
+                except asyncio.TimeoutError:
                     await msg.edit(components=[Button(label="Oops", disabled=True)])
                     await ctx.send(f"😠 || Sorry, {ctx.author.mention}, {user.name} didn't reply on time!! Maybe They are confused, lets give them some time!")
-                    pass
+                    return
             elif rel == 0 and rel2 != 0 or rel != 0 and rel2 == 0:
                 await ctx.reply(f":no_entry_sign: | **{ctx.author.name}** , you or your friend is already married!" ,components=[
         [
             Button(style=ButtonStyle.grey, label="Press F", emoji="❕", disabled=True)],],)
             else:
-                pass
+                return
         else:
             await ctx.reply("BRUH!! You can't Marry a bot!!\n `it's illegal`")
+            return
 
     @commands.command()
     async def div(self,ctx):
@@ -194,7 +195,7 @@ class MarrySys(commands.Cog):
         rel = int(check_relationship(ctx.author.id,"Relationship"))
         if rel == 0:
             await ctx.reply(f":no_entry_sign: | {ctx.author.mention}, you can't divorce if you aren't married!")
-            pass
+            return
         else:
             try:
                 ppl = discord.utils.get(self.bot.get_all_members(), id=rel)
@@ -224,15 +225,14 @@ class MarrySys(commands.Cog):
                         add_relationship(ppl.id,"Relationship","0")
                         rmv_time(int(ppl.id))
                         rmv_time(int(ctx.author.id))
-                        pass
+                        return
                     else:
                         await msg.edit(components=[])
                         await ctx.send(f"👍 || {ctx.author.mention},You have declined to divorce.")
-                        pass
-                except Error as e:
-                    print(e)
+                        return
+                except asyncio.TimeoutError:
                     await msg.edit(components=[Button(label="Oops", disabled=True)])
-                    await ctx.send(f"😠 || Sorry, {ctx.author.mention}, {ppl.name} didn't reply on time!! Maybe They are confused, lets give them some time!")
+                    await ctx.send(f"😠 || Sorry, {ctx.author.mention} you didn't reply on time!!")
                     return
             except:
                 return
@@ -252,7 +252,7 @@ class MarrySys(commands.Cog):
                 emb.set_author(name="Lonely Soul", icon_url=ctx.author.avatar_url)
                 emb.set_thumbnail(url="https://i.pinimg.com/originals/b3/8e/27/b38e27402bc8accd4e9b313a1b567fa6.gif")
                 await ctx.send(embed=emb)
-                pass
+                return
             if len(sib) is 1:
                 ppl = discord.utils.get(self.bot.get_all_members(), id=int(rel))
                 emb=discord.Embed(description=f"▪️ {ppl.name} `({ppl.id})`", color=melon)
@@ -261,6 +261,7 @@ class MarrySys(commands.Cog):
                 emb.timestamp = datetime.datetime.utcnow()
                 emb.set_footer(icon_url=self.bot.user.avatar_url)
                 await ctx.send(embed=emb)
+                return
             else:
                 for a in range(len(sib)):
                     try:
@@ -276,16 +277,21 @@ class MarrySys(commands.Cog):
                 emb.set_footer(icon_url=self.bot.user.avatar_url)
                 emb.set_thumbnail(url="https://4.bp.blogspot.com/-T2bVs6xiUks/XHeLMCZlvOI/AAAAAAAUQDU/k-8YrZmX5j4S9VOaOULzqtExdduBcfPtQCLcBGAs/s1600/AW3567431_10.gif")
                 await ctx.send(embed=emb)
+                return
         if ctx.author.id ==user.id:
             await ctx.reply("Sad Soul!!")
             return
         elif not user.bot:
             rel = str(check_relationship(ctx.author.id,"Siblings"))
             rel2 = str(check_relationship(user.id,"Siblings"))
+            mar1 = int(check_relationship(ctx.author.id,"Relationship"))
+            mar2 = int(check_relationship(user.id,"Relationship"))
             sib = rel.split(",")
             
             sib2 = rel2.split(",")
-            
+            if mar1 == mar2:
+                await ctx.reply(f"🚫 If you wanna SiblingZone Someone, first Disown them!")
+                return
             if rel == "0" and rel2=="0" or str(user.id) not in sib and str(ctx.author.id) not in sib2 :
                 emb = discord.Embed(description=f"Hey {user.mention},  I feel glad too say that {ctx.author.mention} wants to make you their sibling ! It would make them  really happy if you accept this proposal. What do you say?\n")
                 emb.set_author(name=f"{ctx.author.name} wants to make {user.name} their Sibling! <3 ")
@@ -308,19 +314,18 @@ class MarrySys(commands.Cog):
                         await ctx.send(f"🏡 || {user.mention}, Yay! {ctx.author.mention} is now your Sibling. Congrats!!")
                         add_sibling(ctx.author.id, user.id)
                         add_sibling(user.id,ctx.author.id )
-                        pass
+                        return
                     else:
                         await msg.edit(components=[])
                         await ctx.send(f"💔 || {ctx.author.mention} Sorry ! But {user.mention} declined your request :((")
-                        pass
-                except Error as e:
-                    print(e)
+                        return
+                except asyncio.TimeoutError:
                     await msg.edit(components=[Button(label="Oops", disabled=True)])
-                    await ctx.send(f"😠 || Sorry, {ctx.author.mention}, {user.name} didn't reply on time!! Maybe They are confused, lets give them some time!" ,components=[[Button(style=ButtonStyle.grey, label="Press F", emoji="❕", disabled=True)],],)
-                    pass
+                    await ctx.send(f"😠 || Sorry, {ctx.author.mention}, {user.name} didn't reply on time!! Maybe They are confused, lets give them some time!")
+                    return
             else:
                 await ctx.reply(f"You Guys are Already Siblings !")
-                pass
+                return
         else:
             await ctx.reply("BRUH!! You can't make a bot your Sibling!!")
 
@@ -369,14 +374,127 @@ class MarrySys(commands.Cog):
                             await msg.edit(components=[])
                             await ctx.send(f"👍 || {ctx.author.mention},You have declined")
                             return
-                    except Error as e:
-                        print(e)
+                    except asyncio.TimeoutError:
                         await msg.edit(components=[Button(label="Oops", disabled=True)])
+                        await ctx.send(f"😠 || Sorry, {ctx.author.mention}, {user.name} didn't reply on time!! Maybe They are confused, lets give them some time!")
                         return
                 else:
                     await ctx.reply(f"{ctx.author.name}, They are not your Sibling!")
                     return
             except:
                 return
+
+    @commands.command()
+    async def family(self,ctx, user: discord.Member=None):
+        if ctx.channel.id in blacklistChannel:
+            await ctx.reply("Don't Use That Command in General Chat")
+            return
+        prefix = check_prefix(ctx.guild.id)
+        if user is None:
+            rel = str(check_relationship(ctx.author.id,"Siblings"))
+            sib = rel.split(",")
+            print(sib)
+            desc = ""
+            if rel == "0":
+                desc = "You have no E-siblings right now!"
+                lensib = "0"
+            elif len(sib) is 1:
+                ppl = discord.utils.get(self.bot.get_all_members(), id=int(rel))
+                desc= f"▪️ {ppl.name} `({ppl.id})`"
+                lensib=f"{len(sib)}"
+            else:
+                for a in range(len(sib)):
+                    lensib = len(sib)
+                    try:
+                        print(sib[a])
+                        ppl = discord.utils.get(self.bot.get_all_members(), id=int(sib[a]))
+                        desc = desc + f"▪️ {ppl.name} `({ppl.id})`\n"
+                    except Exception as e:
+                        print(e)
+            mar = int(check_relationship(ctx.author.id,"Relationship"))
+
+            if int(mar) is 0:
+                marLIst = f"You are not married! Please marry Someone First! ex. `{prefix}marry @user`"
+            else:
+                ppl = discord.utils.get(self.bot.get_all_members(), id=mar)
+                marLIst = f" {ppl.name} `({ppl.id})`"
+            if len(sib) < 20:
+                emb=discord.Embed( color=ctx.author.color,description=f"`Nickname: {ctx.author.display_name}\nID: {ctx.author.id}`")
+                emb.set_author(name=f"{ctx.author.name}'s Family", icon_url=ctx.author.avatar_url)
+                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(icon_url=self.bot.user.avatar_url)
+                emb.add_field(name=f"💞 Partner :", value=f" {marLIst}💓",inline=False)
+                emb.add_field(name=f"❣ Siblings[{lensib}] :", value=f"{desc}",inline=False)
+                emb.set_image(url="https://giffiles.alphacoders.com/113/113317.gif")
+                await ctx.send(embed=emb)
+                return
+            else:
+                emb=discord.Embed(color=ctx.author.color,description=f"`Nickname: {ctx.author.display_name}\nID: {ctx.author.id}`")
+                emb.set_author(name=f"{ctx.author.name}'s Family", icon_url=ctx.author.avatar_url)
+                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(icon_url=self.bot.user.avatar_url)
+                emb.add_field(name=f"💞 Partner :", value=f" {marLIst}💓",inline=False)
+                await ctx.send(embed=emb)
+                embed=discord.Embed(color=ctx.author.color,description=f"**❣ Siblings[{lensib}] :**\n{desc}")
+                embed.set_author(name=f"{ctx.author.name}'s Siblings", icon_url=ctx.author.avatar_url)
+                embed.timestamp = datetime.datetime.utcnow()
+                embed.set_footer(icon_url=self.bot.user.avatar_url)
+                embed.set_image(url="https://giffiles.alphacoders.com/113/113317.gif")
+                await ctx.send(embed=embed)
+                return
+        else:
+            rel = str(check_relationship(user.id,"Siblings"))
+            sib = rel.split(",")
+            desc = ""
+            if rel == "0":
+                desc = "They have no E-siblings right now!"
+                lensib = "0"
+            elif len(sib) is 1:
+                ppl = discord.utils.get(self.bot.get_all_members(), id=int(rel))
+                desc= f"▪️ {ppl.name} `({ppl.id})`"
+                lensib=f"{len(sib)}"
+            else:
+                for a in range(len(sib)):
+                    lensib = len(sib)
+                    try:
+                        print(sib[a])
+                        ppl = discord.utils.get(self.bot.get_all_members(), id=int(sib[a]))
+                        desc = desc + f"▪️ {ppl.name} `({ppl.id})`\n"
+                    except:
+                        print("hmm")
+                        
+            mar = int(check_relationship(user.id,"Relationship"))
+
+            if int(mar) == 0:
+                marLIst = f"They are not married! Please marry Someone First! ex. `{prefix}marry @user`"
+            else:
+                ppl = discord.utils.get(self.bot.get_all_members(), id=mar)
+                marLIst = f"{ppl.name} `({ppl.id})`"
+
+            if len(sib) < 20:
+                emb=discord.Embed( color=user.color,description=f"`Nickname: {user.display_name}\nID: {user.id}`")
+                emb.set_author(name=f"{user.name}'s Family", icon_url=user.avatar_url)
+                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(icon_url=self.bot.user.avatar_url)
+                emb.add_field(name=f"💞 Partner :", value=f" {marLIst}💓",inline=False)
+                emb.add_field(name=f"❣ Siblings[{lensib}] :", value=f"{desc}",inline=False)
+                emb.set_image(url="https://giffiles.alphacoders.com/113/113317.gif")
+                await ctx.send(embed=emb)
+                return
+            else:
+                emb=discord.Embed(color=user.color,description=f"`Nickname: {user.display_name}\nID: {user.id}`")
+                emb.set_author(name=f"{user.name}'s Family", icon_url=user.avatar_url)
+                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(icon_url=self.bot.user.avatar_url)
+                emb.add_field(name=f"💞 Partner :", value=f" {marLIst}💓",inline=False)
+                await ctx.send(embed=emb)
+                embed=discord.Embed(color=user.color,description=f"**❣ Siblings[{lensib}] :**\n{desc}")
+                embed.set_author(name=f"{user.name}'s Siblings", icon_url=user.avatar_url)
+                embed.timestamp = datetime.datetime.utcnow()
+                embed.set_footer(icon_url=self.bot.user.avatar_url)
+                embed.set_image(url="https://giffiles.alphacoders.com/113/113317.gif")
+                await ctx.send(embed=embed)
+                return
+
 def setup(bot):
     bot.add_cog(MarrySys(bot))
