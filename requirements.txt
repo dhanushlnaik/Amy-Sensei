@@ -19,3 +19,9 @@ giphy_client
 discord.py>=1.7.2
 discord_components
 urbandict
+imageio
+pillow
+numpy
+jokeapi
+random_word
+quote
