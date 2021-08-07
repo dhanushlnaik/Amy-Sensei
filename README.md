@@ -3,7 +3,7 @@ Amy Sensei is a feature-rich discord bot with many Fun Commands , Date any Disco
 <img width="50%" height="50%" alt="Github" src="https://i.pinimg.com/originals/8a/a6/4a/8aa64a89ebe0e4e76504f240cf528612.gif" />
 
 ## Fun
-<img width="30%" align="right" alt="Github" src="amysan.gif" />
+<img width="30%" align="right" alt="Github" src="https://firebasestorage.googleapis.com/v0/b/aiko-mizuki.appspot.com/o/amy%20sensei%2Floveroll.gif?alt=media&token=e7cf8f48-bc97-4357-8840-e70f313457bb" />
 
 - `cat` - Random Cat Photo with a Fact.
 - `dog` - Random Dog Photo with a Fact.
@@ -25,6 +25,7 @@ Amy Sensei is a feature-rich discord bot with many Fun Commands , Date any Disco
 - `disown` - Disown someone who is your Sibling.
 
 ## Games
+<img width="50%" align="right" alt="Github" src="https://firebasestorage.googleapis.com/v0/b/aiko-mizuki.appspot.com/o/amy%20sensei%2Fyessir.gif?alt=media&token=fc9b6081-792d-4c56-ab5b-2563338858d0" />
 
 - `truth` - Truth Question!
 - `dare`  - Dare Question!
